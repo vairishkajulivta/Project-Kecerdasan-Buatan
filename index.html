@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NutriCheck AI – Chatbot Gizi</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🥗</div>
+    <div class="logo-text">Nutri<span>Check</span> AI</div>
+  </div>
+  <div class="header-info">
+    <div class="online-dot"></div>
+    <span>Berbasis Data</span>
+    <div class="sdg-tag">SDG 2</div>
+  </div>
+</header>
+
+<div class="chat-area" id="chatArea"></div>
+
+<div class="quick-suggestions" id="quickSuggestions">
+  <button class="quick-btn" onclick="kirimPesan(this.textContent)">🍜 Apakah mie ayam bagus untuk diet?</button>
+  <button class="quick-btn" onclick="kirimPesan(this.textContent)">🍗 Berapa kalori ayam goreng?</button>
+  <button class="quick-btn" onclick="kirimPesan(this.textContent)">🥦 Gizi tempe itu apa saja?</button>
+  <button class="quick-btn" onclick="kirimPesan(this.textContent)">🍚 Nasi putih cocok untuk penderita diabetes?</button>
+</div>
+
+<div class="age-selector-bar" id="ageSelectorBar">
+  <span class="age-selector-label">👤 Usia:</span>
+  <button class="age-btn active" onclick="setAge('semua')" id="ageBtn-semua">Semua Umur</button>
+  <button class="age-btn" onclick="setAge('bayi')" id="ageBtn-bayi">🍼 Bayi (0–1 thn)</button>
+  <button class="age-btn" onclick="setAge('balita')" id="ageBtn-balita">🧒 Balita (1–5 thn)</button>
+  <button class="age-btn" onclick="setAge('anak')" id="ageBtn-anak">🧒 Anak (6–12 thn)</button>
+  <button class="age-btn" onclick="setAge('remaja')" id="ageBtn-remaja">👦 Remaja (13–17 thn)</button>
+  <button class="age-btn" onclick="setAge('dewasa')" id="ageBtn-dewasa">🧑 Dewasa (18–59 thn)</button>
+  <button class="age-btn" onclick="setAge('lansia')" id="ageBtn-lansia">👴 Lansia (60+ thn)</button>
+</div>
+
+<div class="input-bar">
+  <input type="text" id="inputMsg" placeholder="Tanya soal gizi makanan... contoh: apakah mie ayam bagus untuk diet?" autocomplete="off"/>
+  <button class="send-btn" onclick="kirimPesan()">➤</button>
+</div>
+
+<footer>📊 Database Makanan Indonesia · Sumber: Data Nilai Gizi Nasional</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
