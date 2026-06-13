@@ -11,29 +11,21 @@ const AGE_GROUPS = {
     label: 'Bayi (0–1 tahun)', icon: '🍼',
     rda: { energy_kcal: 650, protein_g: 12, carbohydrate_g: 70, fat_g: 36, sugar_g: 20, sodium_mg: 200, fiber_g: 0 },
     rules: {
-      forbidden: [
-        // Minuman berbahaya
-        'kopi', 'teh', 'alkohol', 'bir', 'wine', 'soda', 'minuman bersoda', 'energy drink',
-        // Bumbu & makanan tinggi sodium
-        'kecap', 'sambal', 'terasi', 'petis', 'tauco', 'abon', 'dendeng', 'acar', 'asinan',
-        'ikan asin', 'sosis', 'nugget', 'kornet', 'kaldu', 'royco', 'masako', 'sarimi',
-        'indomie', 'supermi', 'mie goreng', 'mie instan', 'mi instan', 'penyedap', 'misoa',
-        // Produk susu sapi & olahan
-        'susu sapi', 'susu bubuk', 'susu kental', 'susu uht', 'susu ultra', 'susu full cream',
-        'susu bear', 'susu skim', 'susu low fat', 'susu greenfields', 'susu kambing',
-        'dancow', 'frisian', 'bebelac', 'indomilk', 'greenfields',
-        'yogurt', 'yoghurt', 'keju', 'mentega', 'butter', 'whipped', 'krimer', 'kopi susu',
-        // Gula & makanan manis
-        'madu', 'sirup', 'permen', 'coklat', 'chocolate', 'candy', 'es krim', 'eskrim', 'ice cream',
-        // Junk food & olahan
-        'keripik', 'chips', 'snack', 'biskuit', 'wafer', 'burger', 'pizza', 'hot dog', 'sushi',
-        // Kacang keras (risiko tersedak & alergi)
-        'almond', 'kenari', 'hazelnut', 'pistachio', 'kacang mete',
+      forbidden: ['kopi', 'teh', 'alkohol', 'madu', 'garam', 'gula', 'mie instan', 'keripik', 'coklat', 'keju', 'soda', 'minuman bersoda', 'susu sapi segar'],
+      // Makanan yang BELUM BISA dikonsumsi bayi karena tekstur/bentuknya (bukan karena gizinya), risiko tersedak/terlalu keras
+      textureForbidden: [
+        'goreng', 'gorengan', 'crispy', 'tepung', 'krispi', 'kerupuk', 'keripik',
+        'sate', 'tusuk', 'sosis', 'nugget', 'bakso', 'cireng', 'cilok',
+        'kacang', 'kerang', 'cumi', 'udang', 'kepiting',
+        'pedas', 'sambal', 'rendang', 'cabai', 'cabe', 'lada', 'merica',
+        'tulang', 'duri', 'utuh', 'pizza', 'burger', 'permen', 'cokelat', 'coklat',
+        'es krim', 'wafer', 'biskuit', 'mi ', 'mie', 'bihun', 'pasta'
       ],
       sodiumMax: 200, sugarMax: 5, maxKalori: 200,
       warningMsg: '⛔ Bayi di bawah 1 tahun sangat rentan. Hindari makanan yang mengandung garam, gula berlebih, madu, dan kafein.',
       goodFoods: ['bubur', 'susu', 'asi', 'pisang', 'wortel', 'ubi'],
       forbiddenMsg: 'Tidak direkomendasikan untuk bayi (0–1 tahun).',
+      textureMsg: 'Belum bisa dikonsumsi oleh bayi (0–1 tahun) — tekstur dan jenis makanan ini berisiko tersedak (choking hazard) dan belum sesuai dengan kemampuan mengunyah serta sistem pencernaan bayi. Berikan dalam bentuk yang dilumatkan/dihaluskan sesuai anjuran MPASI, atau tunggu hingga anak lebih siap.',
       hatiMsg: 'Perlu perhatian khusus untuk bayi — konsultasikan dengan dokter anak sebelum memberikan.',
       amanMsg: 'Relatif aman untuk bayi — tetap sesuaikan tekstur dan porsi dengan usia.'
     }
@@ -42,10 +34,18 @@ const AGE_GROUPS = {
     label: 'Balita (1–5 tahun)', icon: '🧒',
     rda: { energy_kcal: 1350, protein_g: 20, carbohydrate_g: 215, fat_g: 45, sugar_g: 25, sodium_mg: 800, fiber_g: 16 },
     rules: {
+      // Makanan yang BELUM BISA/BELUM DISARANKAN untuk balita karena tekstur/bentuk/rasa, bukan sekadar kandungan gizi
+      textureForbidden: [
+        'kacang utuh', 'kacang tanah', 'kacang mete', 'kacang almond', 'kacang polong utuh',
+        'sate', 'tusuk', 'kerang', 'cumi', 'permen karet', 'popcorn',
+        'pedas', 'sambal', 'cabai', 'cabe', 'lada', 'merica', 'rendang pedas',
+        'kerupuk keras', 'es batu', 'tulang', 'duri'
+      ],
       sodiumMax: 800, sugarMax: 15, maxKalori: 400,
       warningMsg: '👶 Balita membutuhkan nutrisi padat namun dengan batasan garam, gula, dan kafein.',
       goodFoods: ['sayur', 'buah', 'telur', 'ikan', 'susu', 'tempe', 'tahu'],
       forbiddenMsg: 'Tidak direkomendasikan untuk balita (1–5 tahun) — kadar gula/garam/kafein terlalu tinggi.',
+      textureMsg: 'Belum disarankan untuk balita (1–5 tahun) — bentuk/teksturnya berisiko tersedak (choking hazard) atau terlalu pedas/keras. Jika diberikan, potong kecil-kecil, hindari rasa pedas, dan selalu dampingi saat makan.',
       hatiMsg: 'Boleh diberikan pada balita dalam porsi sangat kecil — perhatikan kandungan garam dan gula.',
       amanMsg: 'Cocok untuk balita — bergizi dan aman dalam porsi yang sesuai usia.'
     }
@@ -120,25 +120,22 @@ function getAgeAnalysis(food) {
   const p  = food.protein_g ?? 0;
   
   const isForbiddenName = (rules.forbidden || []).some(kw => foodName.includes(kw));
-  
-  // Khusus bayi: susu non-ASI, yogurt, keju, dan produk olahan susu TIDAK BOLEH untuk 0-1 tahun
-  const BAYI_FORBIDDEN_PRODUCTS = ['susu', 'yogurt', 'yoghurt', 'keju', 'mentega', 'krim', 'butter', 'whipped cream', 'es krim', 'ice cream', 'pudding susu', 'custard'];
-  const isBayiSusuFormula = currentAge === 'bayi' && (
-    BAYI_FORBIDDEN_PRODUCTS.some(kw => foodName.includes(kw)) &&
-    !foodName.includes('asi') && !foodName.includes('ibu')
-  );
-
+  const textureMatch = (rules.textureForbidden || []).find(kw => foodName.includes(kw));
+  const isTextureForbidden = !!textureMatch;
   const sodiumTooHigh = na > (rules.sodiumMax || 9999);
   const sugarTooHigh = s > (rules.sugarMax || 9999);
   const caloriesTooHigh = e > (rules.maxKalori || 9999) && currentAge === 'bayi';
   
   let ageVerdict, ageMsg, ageExtra = [];
   
-  if (isForbiddenName || isBayiSusuFormula || sodiumTooHigh || (sugarTooHigh && s > 25) || caloriesTooHigh) {
+  if (isTextureForbidden) {
+    // Belum bisa dikonsumsi karena bentuk/tekstur/jenis makanan (choking hazard, terlalu keras/pedas), bukan karena gizinya
     ageVerdict = 'hindari';
-    ageMsg = isBayiSusuFormula
-      ? 'Tidak direkomendasikan untuk bayi (0–1 tahun). Produk susu, yogurt, dan olahannya mengandung protein sapi yang belum bisa dicerna bayi. Bayi 0–1 tahun sebaiknya hanya mendapat ASI atau susu formula khusus bayi atas rekomendasi dokter.'
-      : rules.forbiddenMsg;
+    ageMsg = rules.textureMsg || rules.forbiddenMsg;
+    ageExtra.push(`🚫 Jenis/tekstur makanan ini ("${textureMatch}") belum sesuai untuk ${group.label}`);
+  } else if (isForbiddenName || sodiumTooHigh || (sugarTooHigh && s > 25) || caloriesTooHigh) {
+    ageVerdict = 'hindari';
+    ageMsg = rules.forbiddenMsg;
     if (sodiumTooHigh) ageExtra.push(`⚠️ Natrium ${na}mg melebihi batas aman untuk ${group.label} (maks. ${rules.sodiumMax}mg)`);
     if (sugarTooHigh && s > 25) ageExtra.push(`⚠️ Gula ${s}g terlalu tinggi untuk ${group.label} (maks. ${rules.sugarMax}g)`);
   } else if (sugarTooHigh || (na > (rules.sodiumMax || 9999) * 0.6)) {
@@ -176,10 +173,7 @@ function detectIntent(teks) {
 }
 
 function cariFoods(query) {
-  const q = query.toLowerCase()
-    .replace(/apakah|bagaimana|berapa|kalori|gizi|kandungan|nutrisi|untuk|cocok|bagus|diet|diabetes|jantung|sehat|aman|hindari|orang|yang|lagi|sedang|penderita|ini|itu|nya/g, ' ')
-    .replace(/[?!.,;:'"()]/g, ' ')
-    .trim();
+  const q = query.toLowerCase().replace(/apakah|bagaimana|berapa|kalori|gizi|kandungan|nutrisi|untuk|cocok|bagus|diet|diabetes|jantung|sehat|aman|hindari|orang|yang|lagi|sedang|penderita|ini|itu|nya/g, ' ').trim();
   const tokens = q.split(/\s+/).filter(t => t.length > 2);
   
   let results = [];
@@ -194,31 +188,10 @@ function cariFoods(query) {
     seen.add(f.name); return true;
   });
   
-  // Filter: hanya ambil kata makanan utama (daging, sapi, anak, kecil) — bukan kata query umum
-  const foodTokens = tokens.filter(t => !['boleh', 'kecil', 'besar', 'muda', 'tua', 'segar', 'matang'].includes(t));
-
   results.sort((a, b) => {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase();
-    const queryJoined = foodTokens.join(' ');
-
-    // Prioritas 1: exact match nama == query
-    const exactA = nameA === queryJoined ? 1 : 0;
-    const exactB = nameB === queryJoined ? 1 : 0;
-    if (exactB !== exactA) return exactB - exactA;
-
-    // Prioritas 2: nama dimulai dengan token pertama (misal "Daging" dulu sebelum "Masako Daging")
-    const startsA = nameA.startsWith(foodTokens[0]) ? 1 : 0;
-    const startsB = nameB.startsWith(foodTokens[0]) ? 1 : 0;
-    if (startsB !== startsA) return startsB - startsA;
-
-    // Prioritas 3: jumlah token yang cocok
-    const scoreA = foodTokens.filter(t => nameA.includes(t)).length;
-    const scoreB = foodTokens.filter(t => nameB.includes(t)).length;
-    if (scoreB !== scoreA) return scoreB - scoreA;
-
-    // Prioritas 4: nama lebih pendek lebih relevan (hindari nama panjang seperti merek)
-    return nameA.length - nameB.length;
+    const scoreA = tokens.filter(t => a.name.toLowerCase().includes(t)).length;
+    const scoreB = tokens.filter(t => b.name.toLowerCase().includes(t)).length;
+    return scoreB - scoreA;
   });
   
   return results.slice(0, 5);
@@ -304,13 +277,8 @@ function buildResponse(query) {
   }
   
   const food = foods[0];
-  const { verdict: baseVerdict, icon: baseIcon, alasan, saran } = analisaGizi(food, intent);
-  const ageAnalysis = getAgeAnalysis(food);
-
-  // Jika usia dipilih dan verdict usia = hindari, override badge utama
-  const verdict = (ageAnalysis && ageAnalysis.verdict === 'hindari') ? 'hindari' : baseVerdict;
-  const icon    = (ageAnalysis && ageAnalysis.verdict === 'hindari') ? '🚫' : baseIcon;
-
+  const { verdict, icon, alasan, saran } = analisaGizi(food, intent);
+  
   const intentLabel = { diet: 'untuk program diet', diabetes: 'untuk penderita diabetes', jantung: 'untuk kesehatan jantung', gizi: '— informasi gizi', compare: '— perbandingan gizi', rekomendasi: '— rekomendasi gizi' }[intent] || '';
   const verdictLabel = { aman: 'AMAN / DIREKOMENDASIKAN', hati: 'BOLEH — PORSI WAJAR', hindari: 'PERLU DIHINDARI' }[verdict];
 
@@ -334,6 +302,7 @@ function buildResponse(query) {
   }).join('');
 
   const altChips = foods.slice(1).map(f => `<button class="chip-btn" onclick="kirimPesan('gizi ${f.name}')">${f.name}</button>`).join('');
+  const ageAnalysis = getAgeAnalysis(food);
   let ageInfoHTML = '';
   
   if (ageAnalysis) {
