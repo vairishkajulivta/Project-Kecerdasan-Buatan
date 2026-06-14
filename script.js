@@ -9,43 +9,72 @@ const AGE_GROUPS = {
   },
   bayi: {
     label: 'Bayi (0–1 tahun)', icon: '🍼',
-    rda: { energy_kcal: 650, protein_g: 12, carbohydrate_g: 70, fat_g: 36, sugar_g: 20, sodium_mg: 200, fiber_g: 0 },
+    rda: { energy_kcal: 650, protein_g: 12, carbohydrate_g: 70, fat_g: 36, sugar_g: 5, sodium_mg: 200, fiber_g: 0 },
     rules: {
-      forbidden: ['kopi', 'teh', 'alkohol', 'madu', 'garam', 'gula', 'mie instan', 'keripik', 'coklat', 'keju', 'soda', 'minuman bersoda', 'susu sapi segar'],
-      // Makanan yang BELUM BISA dikonsumsi bayi karena tekstur/bentuknya (bukan karena gizinya), risiko tersedak/terlalu keras
-      textureForbidden: [
-        'goreng', 'gorengan', 'crispy', 'tepung', 'krispi', 'kerupuk', 'keripik',
-        'sate', 'tusuk', 'sosis', 'nugget', 'bakso', 'cireng', 'cilok',
-        'kacang', 'kerang', 'cumi', 'udang', 'kepiting',
-        'pedas', 'sambal', 'rendang', 'cabai', 'cabe', 'lada', 'merica',
-        'tulang', 'duri', 'utuh', 'pizza', 'burger', 'permen', 'cokelat', 'coklat',
-        'es krim', 'wafer', 'biskuit', 'mi ', 'mie', 'bihun', 'pasta'
+      forbidden: [
+        // Minuman berbahaya
+        'kopi', 'teh', 'espresso', 'alkohol', 'bir', 'wine', 'vodka', 'soda', 'coca cola',
+        'minuman bersoda', 'energy drink', 'red bull', 'jus kemasan', 'minuman manis kemasan',
+        'chatime', 'starbucks', 'thai tea', 'milk tea', 'taro milk', 'yuzu tea',
+        // Produk susu sapi & olahan (bayi 0-1 thn belum bisa cerna protein sapi)
+        'susu sapi', 'susu bubuk', 'susu kental', 'susu uht', 'susu ultra', 'susu full cream',
+        'susu bear', 'susu skim', 'susu low fat', 'susu kambing', 'susu kuda',
+        'dancow', 'frisian', 'bebelac', 'indomilk', 'greenfields', 'ultra milk', 'ultramilk',
+        'yogurt', 'yoghurt', 'keju', 'mentega', 'butter', 'whipped', 'krimer', 'blue band',
+        // Bumbu & makanan tinggi sodium / olahan
+        'kecap', 'sambal', 'terasi', 'petis', 'tauco', 'abon', 'dendeng', 'acar', 'asinan',
+        'ikan asin', 'ikan asap', 'daging asap', 'sosis', 'nugget', 'kornet', 'misoa',
+        'royco', 'masako', 'ajinomoto', 'penyedap', 'bumbu instan', 'saos', 'saus',
+        'indomie', 'supermi', 'sarimi', 'mie goreng', 'mie instan', 'mi instan', 'bihun instan',
+        // Makanan manis & tinggi gula
+        'madu', 'sirup', 'permen', 'candy', 'coklat', 'chocolate', 'nutella', 'selai coklat',
+        'es krim', 'eskrim', 'ice cream', 'gelato', 'donat', 'kue tar', 'wajik',
+        // Junk food & snack olahan
+        'keripik', 'chitato', 'lays', 'piattos', 'doritos', 'cheetos', 'taro net',
+        'biskuit', 'wafer', 'kitkat', 'oreo', 'burger', 'pizza', 'hot dog', 'sushi', 'sashimi',
+        'nugget', 'croissant', 'puff pastry', 'french fries',
+        // Kacang keras (risiko tersedak & alergi)
+        'almond', 'kenari', 'hazelnut', 'pistachio', 'kacang mete',
+        // Makanan masakan berbumbu (hampir selalu mengandung garam tersembunyi)
+        'sop', 'soto', 'rawon', 'gulai', 'rendang', 'opor', 'tongseng', 'semur', 'balado',
+        'goreng', 'tumis', 'bakar', 'panggang', 'rica', 'kare', 'kari', 'pepes', 'asam manis',
+        'brongkos', 'gado-gado', 'ketoprak', 'pempek', 'rujak', 'sayur asem', 'sayur lebui',
+        'ayam bacem', 'tahu bacem', 'ayam brand',
+        // Makanan tinggi kalori / tidak sesuai bayi
+        'coca cola', 'kfc', 'mc', 'mcfloat',
       ],
       sodiumMax: 200, sugarMax: 5, maxKalori: 200,
       warningMsg: '⛔ Bayi di bawah 1 tahun sangat rentan. Hindari makanan yang mengandung garam, gula berlebih, madu, dan kafein.',
-      goodFoods: ['bubur', 'susu', 'asi', 'pisang', 'wortel', 'ubi'],
-      forbiddenMsg: 'Tidak direkomendasikan untuk bayi (0–1 tahun).',
-      textureMsg: 'Belum bisa dikonsumsi oleh bayi (0–1 tahun) — tekstur dan jenis makanan ini berisiko tersedak (choking hazard) dan belum sesuai dengan kemampuan mengunyah serta sistem pencernaan bayi. Berikan dalam bentuk yang dilumatkan/dihaluskan sesuai anjuran MPASI, atau tunggu hingga anak lebih siap.',
+      goodFoods: ['bubur', 'asi', 'pisang', 'wortel', 'ubi', 'kentang', 'alpukat', 'labu'],
+      forbiddenMsg: 'Tidak direkomendasikan untuk bayi (0–1 tahun). Bayi usia ini sebaiknya hanya mengonsumsi ASI/susu formula khusus bayi dan MPASI yang sesuai usia.',
       hatiMsg: 'Perlu perhatian khusus untuk bayi — konsultasikan dengan dokter anak sebelum memberikan.',
       amanMsg: 'Relatif aman untuk bayi — tetap sesuaikan tekstur dan porsi dengan usia.'
     }
   },
   balita: {
     label: 'Balita (1–5 tahun)', icon: '🧒',
-    rda: { energy_kcal: 1350, protein_g: 20, carbohydrate_g: 215, fat_g: 45, sugar_g: 25, sodium_mg: 800, fiber_g: 16 },
+    rda: { energy_kcal: 1350, protein_g: 20, carbohydrate_g: 215, fat_g: 45, sugar_g: 15, sodium_mg: 700, fiber_g: 16 },
     rules: {
-      // Makanan yang BELUM BISA/BELUM DISARANKAN untuk balita karena tekstur/bentuk/rasa, bukan sekadar kandungan gizi
-      textureForbidden: [
-        'kacang utuh', 'kacang tanah', 'kacang mete', 'kacang almond', 'kacang polong utuh',
-        'sate', 'tusuk', 'kerang', 'cumi', 'permen karet', 'popcorn',
-        'pedas', 'sambal', 'cabai', 'cabe', 'lada', 'merica', 'rendang pedas',
-        'kerupuk keras', 'es batu', 'tulang', 'duri'
+      forbidden: [
+        // Minuman berbahaya
+        'kopi', 'teh', 'alkohol', 'bir', 'wine', 'minuman bersoda', 'energy drink', 'minuman berenergi',
+        // Makanan tinggi garam / olahan
+        'ikan asin', 'abon', 'dendeng', 'terasi', 'petis', 'tauco', 'asinan',
+        'royco', 'masako', 'ajinomoto', 'penyedap', 'kaldu instan',
+        'sosis', 'nugget', 'kornet', 'daging asap', 'ikan asap', 'misoa',
+        'indomie', 'supermi', 'sarimi', 'mie instan', 'mi instan', 'bihun instan',
+        // Makanan manis ekstrem
+        'madu murni', 'sirup', 'permen', 'candy', 'es krim kemasan', 'minuman manis kemasan',
+        // Kacang keras utuh (risiko tersedak)
+        'kacang mete utuh', 'almond utuh', 'kenari utuh',
+        // Junk food
+        'burger', 'pizza', 'hot dog', 'sushi', 'sashimi',
+        'keripik', 'chips',
       ],
-      sodiumMax: 800, sugarMax: 15, maxKalori: 400,
+      sodiumMax: 700, sugarMax: 15, maxKalori: 400,
       warningMsg: '👶 Balita membutuhkan nutrisi padat namun dengan batasan garam, gula, dan kafein.',
-      goodFoods: ['sayur', 'buah', 'telur', 'ikan', 'susu', 'tempe', 'tahu'],
+      goodFoods: ['sayur', 'buah', 'telur', 'ikan', 'susu', 'tempe', 'tahu', 'nasi', 'kentang'],
       forbiddenMsg: 'Tidak direkomendasikan untuk balita (1–5 tahun) — kadar gula/garam/kafein terlalu tinggi.',
-      textureMsg: 'Belum disarankan untuk balita (1–5 tahun) — bentuk/teksturnya berisiko tersedak (choking hazard) atau terlalu pedas/keras. Jika diberikan, potong kecil-kecil, hindari rasa pedas, dan selalu dampingi saat makan.',
       hatiMsg: 'Boleh diberikan pada balita dalam porsi sangat kecil — perhatikan kandungan garam dan gula.',
       amanMsg: 'Cocok untuk balita — bergizi dan aman dalam porsi yang sesuai usia.'
     }
@@ -120,22 +149,43 @@ function getAgeAnalysis(food) {
   const p  = food.protein_g ?? 0;
   
   const isForbiddenName = (rules.forbidden || []).some(kw => foodName.includes(kw));
-  const textureMatch = (rules.textureForbidden || []).find(kw => foodName.includes(kw));
-  const isTextureForbidden = !!textureMatch;
+
+  // Khusus BAYI: deteksi susu non-ASI (semua susu sapi/formula/UHT/kambing)
+  const isBayiSusuNonASI = currentAge === 'bayi' &&
+    foodName.includes('susu') &&
+    !foodName.includes('asi') && !foodName.includes('ibu') && !foodName.includes('hamil') && !foodName.includes('menyusui');
+
+  // Khusus BAYI: makanan masakan berbumbu hampir selalu mengandung garam tersembunyi
+  const MASAKAN_BUMBU = ['sop', 'soto', 'rawon', 'gulai', 'rendang', 'opor', 'tongseng',
+    'semur', 'balado', 'tumis', 'goreng', 'bakar', 'panggang', 'rica', 'kare', 'kari',
+    'bumbu', 'pepes', 'asam manis', 'teriyaki', 'barbeque', 'bbq', 'brongkos',
+    'gado-gado', 'ketoprak', 'pempek', 'rujak', 'tekwan', 'sukiyaki'];
+  const isBayiMasakanBumbu = currentAge === 'bayi' &&
+    MASAKAN_BUMBU.some(kw => foodName.includes(kw));
+
+  // Khusus BAYI: snack & produk kemasan tidak cocok bayi (data sodium sering 0 padahal tinggi)
+  const SNACK_KEMASAN = ['chitato', 'lays', 'doritos', 'cheetos', 'taro net', 'piattos',
+    'oreo', 'kitkat', 'wafer', 'biskuit', 'kfc', 'mcfloat', 'happytos', 'qtela',
+    'corn flakes', 'energen', 'milo', 'nutrijell', 'agar-agar', 'tepung bakwan',
+    'french fries', 'puff pastry', 'croissant', 'donat'];
+  const isBayiSnackKemasan = currentAge === 'bayi' &&
+    SNACK_KEMASAN.some(kw => foodName.includes(kw));
+
   const sodiumTooHigh = na > (rules.sodiumMax || 9999);
   const sugarTooHigh = s > (rules.sugarMax || 9999);
   const caloriesTooHigh = e > (rules.maxKalori || 9999) && currentAge === 'bayi';
   
   let ageVerdict, ageMsg, ageExtra = [];
   
-  if (isTextureForbidden) {
-    // Belum bisa dikonsumsi karena bentuk/tekstur/jenis makanan (choking hazard, terlalu keras/pedas), bukan karena gizinya
+  if (isForbiddenName || isBayiSusuNonASI || isBayiMasakanBumbu || isBayiSnackKemasan || sodiumTooHigh || sugarTooHigh || caloriesTooHigh) {
     ageVerdict = 'hindari';
-    ageMsg = rules.textureMsg || rules.forbiddenMsg;
-    ageExtra.push(`🚫 Jenis/tekstur makanan ini ("${textureMatch}") belum sesuai untuk ${group.label}`);
-  } else if (isForbiddenName || sodiumTooHigh || (sugarTooHigh && s > 25) || caloriesTooHigh) {
-    ageVerdict = 'hindari';
-    ageMsg = rules.forbiddenMsg;
+    ageMsg = isBayiSusuNonASI
+      ? 'Tidak direkomendasikan untuk bayi (0–1 tahun). Produk susu sapi, yogurt, dan olahannya belum bisa dicerna bayi. Berikan ASI atau susu formula khusus bayi atas rekomendasi dokter.'
+      : isBayiMasakanBumbu
+      ? 'Tidak direkomendasikan untuk bayi (0–1 tahun). Makanan masakan umumnya mengandung garam dan bumbu yang berbahaya bagi ginjal bayi yang masih berkembang.'
+      : isBayiSnackKemasan
+      ? 'Tidak direkomendasikan untuk bayi (0–1 tahun). Produk kemasan/snack tidak sesuai untuk bayi karena mengandung bahan tambahan, garam, dan gula yang berlebihan.'
+      : rules.forbiddenMsg;
     if (sodiumTooHigh) ageExtra.push(`⚠️ Natrium ${na}mg melebihi batas aman untuk ${group.label} (maks. ${rules.sodiumMax}mg)`);
     if (sugarTooHigh && s > 25) ageExtra.push(`⚠️ Gula ${s}g terlalu tinggi untuk ${group.label} (maks. ${rules.sugarMax}g)`);
   } else if (sugarTooHigh || (na > (rules.sodiumMax || 9999) * 0.6)) {
@@ -277,7 +327,12 @@ function buildResponse(query) {
   }
   
   const food = foods[0];
-  const { verdict, icon, alasan, saran } = analisaGizi(food, intent);
+  const { verdict: baseVerdict, icon: baseIcon, alasan, saran } = analisaGizi(food, intent);
+  const ageAnalysis = getAgeAnalysis(food);
+
+  // Override badge utama kalau usia = hindari
+  const verdict = (ageAnalysis && ageAnalysis.verdict === 'hindari') ? 'hindari' : baseVerdict;
+  const icon    = (ageAnalysis && ageAnalysis.verdict === 'hindari') ? '🚫' : baseIcon;
   
   const intentLabel = { diet: 'untuk program diet', diabetes: 'untuk penderita diabetes', jantung: 'untuk kesehatan jantung', gizi: '— informasi gizi', compare: '— perbandingan gizi', rekomendasi: '— rekomendasi gizi' }[intent] || '';
   const verdictLabel = { aman: 'AMAN / DIREKOMENDASIKAN', hati: 'BOLEH — PORSI WAJAR', hindari: 'PERLU DIHINDARI' }[verdict];
@@ -302,7 +357,6 @@ function buildResponse(query) {
   }).join('');
 
   const altChips = foods.slice(1).map(f => `<button class="chip-btn" onclick="kirimPesan('gizi ${f.name}')">${f.name}</button>`).join('');
-  const ageAnalysis = getAgeAnalysis(food);
   let ageInfoHTML = '';
   
   if (ageAnalysis) {
